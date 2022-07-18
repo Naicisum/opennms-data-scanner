@@ -132,5 +132,10 @@ dist
 # IntelliJ Folder
 .idea/
 
+# Redis binaries and data
+redis/bin/redis-cli
+redis/bin/redis-server
+redis/data/dump.rdb
+
 # Stylus - Compiled CSS Files
 public/stylesheets/*.css

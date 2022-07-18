@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    form(action='/backend/login', method='POST')
+        div(class='row')
+            div(class='column')
+                label(for='onms-server') Server:
+                input(id='onms-server', type='text', placeholder='Server Name/Address', name='server')
+            div(class='column')
+                label(for='onms-port') Port:
+                input(id='onms-port', type='text', placeholder='HTTPS Port', name='port')
+            div(class='column')
+                label(for='onms-username') Username:
+                input(id='onms-username', type='text', placeholder='username' name='username')
+            div(class='column')
+                label(for='onms-password') Password:
+                input(id='onms-password', type='password', placeholder='password' name='password')
+            div(class='row')
+                input(type='submit', value='Login')

@@ -1,5 +1,67 @@
 body
   padding: 50px
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
+
 a
   color: #00B7FF
+
+div.dt-buttons
+  display: flex
+  justify-content: center
+  float: unset
+
+div.row
+  display: flex
+
+div.column-half
+  flex: 50%
+  flex-grow: 0
+  flex-shrink: 0
+
+div.column-full
+  flex: 100%
+  flex-grow: 0
+  flex-shrink: 0
+
+div.column
+  margin: 5px
+  padding: 0px
+
+a.nav-button
+  background-color: white
+  color: black
+  border: 2px solid #555555
+  border-radius: 12px
+  padding: 8px 22px
+  text-align: center
+  text-decoration: none
+  display: inline-block
+  font-size: 16px
+  margin: 4px 2px
+  -webkit-transition-duration: 0.4s /* Safari */
+  transition-duration: 0.4s
+  cursor: pointer
+
+a.nav-button:hover
+  background-color: #555555
+  color: white
+
+table.display
+  table-layout: fixed
+  width: 100% !important
+
+table.display td,th
+  width: auto !important
+  white-space: normal
+  text-overflow: ellipsis
+  overflow: hidden
+
+table.layout-header
+  table-layout: fixed
+  width: 25% !important
+
+table.layout-header td,th
+  width: auto !important
+  white-space: normal
+  text-overflow: ellipsis
+  overflow: hidden

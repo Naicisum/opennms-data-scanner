@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='icon', href='/images/favicon.svg')
+  body
+    table(id='page-header' class='layout-header')
+      tr(class='column-quarter')
+        th
+          img(src='/images/OpenNMS_Horizontal-Logo_Light-BG.png' width='100%' height='100%')
+      tr(class='column-quarter')
+        th
+          h1 Data Scanner
+    include navigation
+    block content
+    include session

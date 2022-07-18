@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// Enable Strict Mode; Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
+'use strict';
 
 /**
  * Module dependencies.
