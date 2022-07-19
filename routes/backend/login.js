@@ -2,9 +2,10 @@
 'use strict';
 
 /*eslint no-unused-vars: ["error", { "argsIgnorePattern": "next" }]*/
+const axios = require('axios');
+const createError = require('http-errors');
 const express = require('express');
 const router = express.Router();
-const axios = require('axios');
 
 // Login to OpenNMS
 async function login(req, res, next) {
@@ -26,17 +27,20 @@ async function login(req, res, next) {
         const response = await axios.request(options);
         if (response.status === 200 && response.statusText === 'OK') {
             if (response.data.healthy === true) {
+                req.session.server = req.body.server;
+                req.session.port = req.body.port;
                 req.session.username = req.body.username;
                 req.session.password = req.body.password;
                 req.session.auth = true;
-                res.status(200).send('Login successful');
+                res.redirect('/frontend/index');
             } else {
-                res.status(503).send('Service unavailable');
+                next(createError(503, 'OpenNMS is not healthy'));
             }
         } else if (response.status === 401 && response.statusText === 'Unauthorized') {
-            res.status(401).send('Login failed');
+            next(createError(401, 'Login failed'));
+
         } else {
-            res.status(500).send('Internal server error');
+            next(createError(500, 'Internal server error'));
         }
     } catch (error) {
         next(error);
@@ -53,11 +57,6 @@ router.post('/', async function(req, res, next) {
     } catch (error) {
         next(error);
     }
-
-    console.log('SessionId: ' + req.session.id);
-    console.log('Username:  ' + req.session.username);
-    console.log('Password:  ' + req.session.password);
-    console.log('Auth:      ' + req.session.auth);
 });
 
 module.exports = router;

@@ -137,5 +137,11 @@ redis/bin/redis-cli
 redis/bin/redis-server
 redis/data/dump.rdb
 
+# SQLite database
+lib/better-sqlite3/*.db
+
+# SSL Certificates
+certs/*.pem
+
 # Stylus - Compiled CSS Files
 public/stylesheets/*.css
