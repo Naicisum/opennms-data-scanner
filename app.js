@@ -21,6 +21,7 @@ const logger = require('morgan');
 const stylus = require('stylus');
 const https = require("https");
 const fs = require("fs");
+const db = require('./lib/common/database');
 
 // SSL Certificates and Configuration
 const sslPrivateKey = fs.readFileSync(path.resolve(__dirname, './certs/privkey.pem'), 'utf-8');
@@ -31,6 +32,7 @@ const sslCredentials = {key: sslPrivateKey, cert: sslPublicKey, ca: sslCAKey};
 // Define constants for routers - Server Side
 const loginBeRouter = require('./routes/backend/login');
 const nodesBeRouter = require('./routes/backend/nodes');
+const resourcesBeRouter = require('./routes/backend/resources');
 
 // Define constants for routers - Client Side
 const indexFeRouter = require('./routes/frontend/index');
@@ -118,6 +120,9 @@ async function TestKey(){
 }
 */
 
+// Initialize database
+db.initializeDatabase();
+
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -156,6 +161,7 @@ startRedis().catch(err => {
 // set express routers
 app.use('/backend/login', loginBeRouter);
 app.use('/backend/nodes', nodesBeRouter);
+app.use('/backend/resources', resourcesBeRouter);
 app.use('/frontend/index', indexFeRouter);
 app.use('/frontend/login', loginFeRouter);
 
@@ -180,7 +186,12 @@ app.use(function(err, req, res, next) {
     res.render('frontend/error');
 });
 
-process.on('beforeExit', stopRedis);
-process.on('crash', stopRedis);
+process.on('beforeExit', () => {
+    stopRedis();
+});
+process.on('crash', () => {
+    stopRedis();
+
+});
 
 module.exports = {app: app, server: server};

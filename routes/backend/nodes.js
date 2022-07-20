@@ -27,7 +27,7 @@ async function fetchNodes(req, res, next) {
     try {
         const response = await axios.request(options);
         if (response.status === 200 && response.statusText === 'OK') {
-            const nodes = response.data.node; // OpenNMS API v2 lables nodes as node regardless of the plural form in json format
+            const nodes = response.data.node; // OpenNMS API v2 labels nodes as node regardless of the plural form in json format
             for (const node of nodes) {
                 db.setSessionValue(req.session.id);
                 db.insertNode(node.id, node.label, req.session.id)
