@@ -33,6 +33,7 @@ const sslCredentials = {key: sslPrivateKey, cert: sslPublicKey, ca: sslCAKey};
 const loginBeRouter = require('./routes/backend/login');
 const nodesBeRouter = require('./routes/backend/nodes');
 const resourcesBeRouter = require('./routes/backend/resources');
+const measurementsBeRouter = require('./routes/backend/measurements');
 
 // Define constants for routers - Client Side
 const indexFeRouter = require('./routes/frontend/index');
@@ -70,7 +71,8 @@ async function startRedis() {
     // Start the redis client
     try {
         await redisClient.connect();
-        await redisClient.sendCommand('config', ['set','notify-keyspace-events','Ex']);
+        // TODO: Work on getting subscriber functioning to help do DB cleanup when sessions expire
+        // await redisClient.sendCommand('config', ['set','notify-keyspace-events','Ex']);
         console.log('Redis client started');
     } catch (err) {
         throw new Error('Redis client failed to start' + err);
@@ -162,6 +164,7 @@ startRedis().catch(err => {
 app.use('/backend/login', loginBeRouter);
 app.use('/backend/nodes', nodesBeRouter);
 app.use('/backend/resources', resourcesBeRouter);
+app.use('/backend/measurements', measurementsBeRouter);
 app.use('/frontend/index', indexFeRouter);
 app.use('/frontend/login', loginFeRouter);
 

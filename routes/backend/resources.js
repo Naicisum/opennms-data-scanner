@@ -11,17 +11,19 @@ const db = require('../../lib/common/database');
 // Fetch OpenNMS Resources
 async function fetchResources(req, res, next) {
     if (req.session.auth === undefined || req.session?.auth === false) {
-        next(createError(401, 'Login required'));
+        //next(createError(401, 'Login required'));
+        console.log('Resources error: Login required');
     }
 
-    const nodeIds = await Promise.all([db.getNodeIds(req.session.id)]).catch(error => {
+    const nodes = await Promise.all([db.getNodes(req.session.id)]).catch(error => {
         next(error);
     });
 
     try {
-        for (const nodeId of nodeIds[0]) {
+        for (const nodeId of nodes[0]) {
             const options = {
-                baseURL: 'http://' + req.session.server + ':' + req.session.port + '/opennms/rest/resources/fornode/' + nodeId,
+                baseURL: 'http://' + req.session.server + ':' + req.session.port +
+                         '/opennms/rest/resources/fornode/' + nodeId,
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -34,23 +36,25 @@ async function fetchResources(req, res, next) {
 
             const response = await axios.request(options);
             if (response.status === 200 && response.statusText === 'OK') {
-                const resources = response.data.children.resource; // Contains array of resources even though it's named resource
+                // Contains array of resources even though it's named resource
+                const resources = response.data.children.resource;
                 for (const resource of resources) {
                     const attributes = resource.rrdGraphAttributes;
                     for (const attribute of Object.values(attributes)) {
-                        db.insertResource(nodeId, resource.id, attribute.name);
+                        db.insertResource(req.session.id, nodeId, resource.id, attribute.name);
                     }
                 }
             } else if (response.status === 401 && response.statusText === 'Unauthorized') {
-                next(createError(401, 'Login failed'));
+                //next(createError(401, 'Login failed'));
+                console.log('Resources error: Login failed');
             } else {
-                next(createError(500, 'Internal server error'));
+                //next(createError(500, 'Internal server error'));
+                console.log('Resources error: ' + response.statusText);
             }
         }
-        res.redirect('/frontend/index');
     } catch (error) {
+        //next(createError(500, 'Internal server error'));
         console.log('Resources error: ' + error);
-        next(createError(500, 'Internal server error'));
     }
 
 }
@@ -58,7 +62,8 @@ async function fetchResources(req, res, next) {
 /* POST login information. */
 router.post('/', async function(req, res, next) {
     try {
-        await Promise.all([fetchResources(req, res, next)]);
+        await fetchResources(req, res, next);
+        res.redirect('back');
     } catch (error) {
         next(error);
     }

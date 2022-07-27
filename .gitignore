@@ -138,7 +138,7 @@ redis/bin/redis-server
 redis/data/dump.rdb
 
 # SQLite database
-lib/better-sqlite3/*.db
+lib/better-sqlite3/*.db*
 
 # SSL Certificates
 certs/*.pem
