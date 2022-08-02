@@ -27,11 +27,13 @@ async function fetchMeasurements(req, res, next) {
             console.log('Measurements error: ' + error);
         });
 
-        await db.setResultsSummaryValue(req.session.id, 0, nodeIds.length, 0, 0, 'Total Nodes');
+        await db.setResultsSummaryValue(req.session.id, 0, nodeIds[0].length, 0, 0, 'Total Nodes');
         
         for (const nodeId of nodeIds[0]) {
             const resources = await Promise.all([db.getResources(req.session.id, nodeId)])
                                            .catch(error => { /* next(error); */ console.log('Measurements error: ' + error); });
+
+            if (resources[0] === null) { continue; }
 
             await db.incrementResourcetotalInSummary(req.session.id, resources[0].length);
             await db.setStatusInSummary(req.session.id, 'Scan Started - (' + nodeId + ')');

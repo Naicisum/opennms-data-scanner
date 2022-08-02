@@ -137,13 +137,13 @@ app.use(session({
         host: 'localhost',
         port: 6379,
         client: redisClient,
-        ttl: 300 // Session TTL in seconds
+        ttl: 60 * 60 * 1 // Session TTL in seconds (1 hour)
     }),
     cookie: {
         path: '/',
         httpOnly: true,
         secure: false,
-        maxAge: 300 * 1000, // Session TTL in milliseconds
+        maxAge: 1000 * 60 * 60 * 1, // Session TTL in milliseconds (1 hour)
     },
     saveUninitialized: false,
     resave: false

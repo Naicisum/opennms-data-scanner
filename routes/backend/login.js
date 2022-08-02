@@ -27,7 +27,7 @@ async function login(req, res, next) {
     try {
         const response = await axios.request(options);
         if (response.status === 200 && response.statusText === 'OK') {
-            if (response.data.healthy === true) {
+            if (response.data.healthy === true || req.body.bypass === true) {
                 req.session.server = req.body.server;
                 req.session.port = req.body.port;
                 req.session.username = req.body.username;

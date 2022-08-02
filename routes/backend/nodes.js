@@ -16,7 +16,7 @@ async function fetchNodes(req, res, next) {
         return;
     }
     const options = {
-        baseURL: 'http://' + req.session.server + ':' + req.session.port + '/opennms/api/v2/nodes',
+        baseURL: 'https://' + req.session.server + ':' + req.session.port + '/opennms/api/v2/nodes?limit=0',
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
